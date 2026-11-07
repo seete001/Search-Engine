@@ -8,12 +8,75 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Application
 add_executable(searchengine
                src/main.cpp
                src/Document.cpp
                src/Loader.cpp
+               src/Tokenizer.cpp
+               src/InvertedIndex.cpp
                )
 
 target_include_directories(searchengine
                            PRIVATE include
                           )
+
+# Testing
+enable_testing()
+
+# Document tests
+add_executable(test_document
+               tests/test_document.cpp
+               src/Document.cpp  
+              )
+
+target_include_directories(test_document
+                           PRIVATE include)
+
+add_test(
+        NAME DocumentTests
+        COMMAND test_document
+)
+
+# Loader tests
+add_executable(test_loader
+               tests/test_loader.cpp
+               src/Loader.cpp 
+               src/Document.cpp
+              )
+
+target_include_directories(test_loader
+                           PRIVATE include)
+
+add_test(
+        NAME LoaderTests
+        COMMAND test_loader
+)
+
+# Tokenizer tests
+add_executable(test_tokenizer
+               tests/test_tokenizer.cpp
+               src/Tokenizer.cpp
+              )
+
+target_include_directories(test_tokenizer
+                           PRIVATE include)
+
+add_test(
+        NAME TokenizerTests
+        COMMAND test_tokenizer
+)
+
+# Inverted Index tests
+add_executable(test_inverted_index
+               tests/test_inverted_index.cpp
+               src/InvertedIndex.cpp
+              )
+
+target_include_directories(test_inverted_index
+                           PRIVATE include)
+
+add_test(
+        NAME InvertedIndexTests
+        COMMAND test_inverted_index
+)
