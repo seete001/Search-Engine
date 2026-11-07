@@ -1,30 +1,24 @@
 #include <iostream>
 
-#include "Document.hpp"
+#include "Loader.hpp"
+
+const std::string PATH = "data/documents";
 
 int main(){
-    Document appleReport(
-        1,
-        "Annual Report 2025",
-        "Apple Inc.",
-        2025,
-        "Apple reported strong revenue growth."
-    );
+    Loader loader;
+    std::vector<Document> documents = loader.loadDirectory(PATH);
 
-    std::cout << "Document ID: "
-              << appleReport.getId() << '\n';
+    for(const auto& document: documents){
+        std::cout << "ID: "
+        << document.getId() << '\n';
 
-    std::cout << "Title: "
-              << appleReport.getTitle() << '\n';
+        std::cout << "Title: "
+        << document.getTitle() << '\n';
 
-    std::cout << "Company: "
-              << appleReport.getCompany() << '\n';
+        std::cout << "Content: "
+        << document.getContent() << '\n';
 
-    std::cout << "Year: "
-              << appleReport.getYear() << '\n';
-
-    std::cout << "Content: "
-              << appleReport.getContent() << '\n';
-
+        std::cout << "-------------------\n";
+    }
     return 0;
 }
