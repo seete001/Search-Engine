@@ -1,82 +1,68 @@
+
 cmake_minimum_required(VERSION 3.16)
 
-project(SearchEngine
-        VERSION 1.0
-        LANGUAGES CXX
-        )
+project(SearchEngine VERSION 1.0 LANGUAGES CXX)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Core library
+add_library(searchengine_core
+    src/Document.cpp
+    src/Loader.cpp
+    src/Tokenizer.cpp
+    src/InvertedIndex.cpp
+    src/SearchEngine.cpp
+)
+
+target_include_directories(searchengine_core
+    PUBLIC include
+)
+
 # Application
 add_executable(searchengine
-               src/main.cpp
-               src/Document.cpp
-               src/Loader.cpp
-               src/Tokenizer.cpp
-               src/InvertedIndex.cpp
-               )
+    src/main.cpp
+)
 
-target_include_directories(searchengine
-                           PRIVATE include
-                          )
+target_link_libraries(searchengine
+    PRIVATE searchengine_core
+)
 
 # Testing
 enable_testing()
 
 # Document tests
 add_executable(test_document
-               tests/test_document.cpp
-               src/Document.cpp  
-              )
-
-target_include_directories(test_document
-                           PRIVATE include)
-
-add_test(
-        NAME DocumentTests
-        COMMAND test_document
+    tests/test_document.cpp
 )
+target_link_libraries(test_document PRIVATE searchengine_core)
+add_test(NAME DocumentTests COMMAND test_document)
 
 # Loader tests
 add_executable(test_loader
-               tests/test_loader.cpp
-               src/Loader.cpp 
-               src/Document.cpp
-              )
-
-target_include_directories(test_loader
-                           PRIVATE include)
-
-add_test(
-        NAME LoaderTests
-        COMMAND test_loader
+    tests/test_loader.cpp
 )
+target_link_libraries(test_loader PRIVATE searchengine_core)
+add_test(NAME LoaderTests COMMAND test_loader)
 
 # Tokenizer tests
 add_executable(test_tokenizer
-               tests/test_tokenizer.cpp
-               src/Tokenizer.cpp
-              )
-
-target_include_directories(test_tokenizer
-                           PRIVATE include)
-
-add_test(
-        NAME TokenizerTests
-        COMMAND test_tokenizer
+    tests/test_tokenizer.cpp
 )
+target_link_libraries(test_tokenizer PRIVATE searchengine_core)
+add_test(NAME TokenizerTests COMMAND test_tokenizer)
 
 # Inverted Index tests
 add_executable(test_inverted_index
-               tests/test_inverted_index.cpp
-               src/InvertedIndex.cpp
-              )
-
-target_include_directories(test_inverted_index
-                           PRIVATE include)
-
-add_test(
-        NAME InvertedIndexTests
-        COMMAND test_inverted_index
+    tests/test_inverted_index.cpp
 )
+target_link_libraries(test_inverted_index PRIVATE searchengine_core)
+add_test(NAME InvertedIndexTests COMMAND test_inverted_index)
+
+# Search Engine tests
+add_executable(test_search_engine
+    tests/test_search_engine.cpp
+)
+target_link_libraries(test_search_engine PRIVATE searchengine_core)
+add_test(NAME SearchEngineTests COMMAND test_search_engine)
